@@ -1,5 +1,20 @@
 # inactive_users
 Get a list of users that have not logged in since time x and optionally delete or deactivate them
+
+You **can** pass options to the script, but you don't have to.
+
+Default values are:
+| option | default value |
+| - | - |
+| action | display |
+| directory | /var/www/nextcloud |
+| limit | 1000 |
+| output | plain |
+| time | 1 year |
+| user | www-data |
+
+:warning::warning: **WARNING**: Actions "disable" and "delete" will be executed immediately on all matching users and you will not get asked to confirm them! :warning::warning:
+
 ```
 Usage: main.sh [OPTIONS]
 OPTIONS includes:
