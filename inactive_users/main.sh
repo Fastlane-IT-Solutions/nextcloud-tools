@@ -7,6 +7,14 @@ TIME_PERIOD="1 year"
 OUTPUT="plain"
 ACTION="display"
 
+function check_dependencies {
+	if ! command -v jq &> /dev/null
+	then
+		echo "jq is not installed, but a dependency for this script"
+		echo "Please install jq"
+		exit 1
+	fi
+}
 function calc {
 	# Cut last_seen to date without time
 	last="${last:0:10}"
@@ -176,6 +184,10 @@ function check_input {
 		exit 1
 	fi
 }
+
+# Check if dependencies are met
+check_dependencies
+
 # Load and check given parameters if there are any
 check_params $@
 
