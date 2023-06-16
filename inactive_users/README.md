@@ -1,6 +1,6 @@
 # inactive_users
 Get a list of users that have not logged in since time x and optionally delete or deactivate them
-
+```
 Usage: main.sh [OPTIONS]
 OPTIONS includes:
                 -a | --action   - Select what to do to users [display,disable,delete]   Default: display
@@ -19,3 +19,4 @@ OPTIONS includes:
                                         X month(s)
                                         X year(s)
                 -u | --user     - Define the user who's executing the web server        Default: www-data
+```
