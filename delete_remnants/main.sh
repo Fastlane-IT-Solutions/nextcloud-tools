@@ -1,7 +1,6 @@
 #!/bin/bash
 
 NEXTCLOUDDIR="/var/www/nextcloud"
-USERLIMIT=1000
 HTTP_USER="www-data"
 TIME_PERIOD="1 year"
 OUTPUT="plain"
@@ -33,7 +32,6 @@ function help_text {
 	echo "		-a | --action	- Select what to do to users [display,disable,delete]	Default: display"
 	echo "		-d | --dir	- Define Nextcloud directory. Must be in double quotes	Default: /var/www/nextcloud"
 	echo "		-h | --help	- Show this help text"
-	echo "		-l | --limit	- Define the user limit that occ command evaluates	Default: 1000"
 	echo "		-o | --output	- Select output format [plain,csv,quiet]		Default: plain"
 	echo "		-q | --quiet	- Disable output (same as -o quiet)"
 	echo "		-t | --time	- Define maximum time since last login (e.g. 1 year)	Default: 1 year"
@@ -187,7 +185,7 @@ check_params $@
 # Read user_id and last_seen from occ command
 occ_run | while IFS=\; read uid last
 do
-	if [[ "$last" == "-"]]
+	if [[ "$last" == "-" ]]
 	then
 		last="1970-01-01"
 	fi
