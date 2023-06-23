@@ -1,4 +1,4 @@
-# inactive_users
+# delete_remnants
 Get a list of remnant ldap users that have not logged in since time x and optionally delete or deactivate them
 
 You **can** pass options to the script, but you don't have to.
