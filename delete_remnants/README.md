@@ -9,6 +9,7 @@ Default values are:
 | action | display |
 | directory | /var/www/nextcloud |
 | output | plain |
+| row | detected |
 | time | 1 year |
 | user | www-data |
 
@@ -17,12 +18,15 @@ Default values are:
 ```
 Usage: main.sh [OPTIONS]
 OPTIONS includes:
-                -a | --action   - Select what to do to users [display,disable,delete]   Default: display
-                -d | --dir      - Define Nextcloud directory. Must be in double quotes  Default: /var/www/nextcloud
+                -a | --action   - Select what to do to users [display,disable,delete]		Default: display
+                -d | --dir      - Define Nextcloud directory. Must be in double quotes		Default: /var/www/nextcloud
                 -h | --help     - Show this help text
-                -o | --output   - Select output format [plain,csv,quiet]                Default: plain
+                -o | --output   - Select output format [plain,csv,quiet]			Default: plain
                 -q | --quiet    - Disable output (same as -o quiet)
-                -t | --time     - Define maximum time since last login (e.g. 1 year)    Default: 1 year
+	        -r | --row      - Define which date row to evaluate. [login,detected]		Default: detected
+				  login: evaluates last login date
+				  detected: evaluates the date on which the user was marked as remnant
+                -t | --time     - Define maximum time since last login (e.g. 1 year)		Default: 1 year
                                   Valid time formats are: 
                                         X second(s)
                                         X minute(s)
@@ -31,5 +35,5 @@ OPTIONS includes:
                                         X week(s)
                                         X month(s)
                                         X year(s)
-                -u | --user     - Define the user who's executing the web server        Default: www-data
+                -u | --user     - Define the user who's executing the web server		Default: www-data
 ```
