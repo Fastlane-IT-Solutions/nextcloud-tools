@@ -5,6 +5,7 @@ HTTP_USER="www-data"
 TIME_PERIOD="1 year"
 OUTPUT="plain"
 ACTION="display"
+ROW="detectedOn"
 
 function check_dependencies {
 	if ! command -v jq &> /dev/null
@@ -29,12 +30,15 @@ function calc {
 function help_text {
 	echo "Usage: main.sh [OPTIONS]"
 	echo "OPTIONS includes:"
-	echo "		-a | --action	- Select what to do to users [display,disable,delete]	Default: display"
-	echo "		-d | --dir	- Define Nextcloud directory. Must be in double quotes	Default: /var/www/nextcloud"
+	echo "		-a | --action	- Select what to do to users [display,disable,delete]		Default: display"
+	echo "		-d | --dir	- Define Nextcloud directory. Must be in double quotes		Default: /var/www/nextcloud"
 	echo "		-h | --help	- Show this help text"
-	echo "		-o | --output	- Select output format [plain,csv,quiet]		Default: plain"
+	echo "		-o | --output	- Select output format [plain,csv,quiet]			Default: plain"
 	echo "		-q | --quiet	- Disable output (same as -o quiet)"
-	echo "		-t | --time	- Define maximum time since last login (e.g. 1 year)	Default: 1 year"
+	echo "		-r | --row	- Define which date row to evaluate. [login,detected]		Default: detected"
+	echo "				  login: evaluates last login date"
+	echo "				  detected: evaluates the date on which the user was marked as remnant"
+	echo "		-t | --time	- Define maximum time since last login (e.g. 1 year)		Default: 1 year"
 	echo "				  Valid time formats are: "
 	echo "				  	X second(s)"
 	echo "				  	X minute(s)"
@@ -43,7 +47,7 @@ function help_text {
 	echo "				  	X week(s)"
 	echo "				  	X month(s)"
 	echo "				  	X year(s)"
-	echo "		-u | --user	- Define the user who's executing the web server	Default: www-data"
+	echo "		-u | --user	- Define the user who's executing the web server		Default: www-data"
 	exit 1
 }
 function check_params {
@@ -108,6 +112,21 @@ function check_params {
 	      	    		-q | --quiet ) 
 		        		OUTPUT=quiet
 		       			;;
+	      	    	  	-r | --row ) 
+		        		shift
+					case $1 in
+						login)
+							ROW=lastLogin
+							;;
+						detected)
+							ROW=detectedOn
+							;;
+						*)
+							echo "$1: invalid date row. Valid options are: login,detected"
+							exit 1
+							;;
+					esac
+					;;
 	      	    		-t | --time ) 
 		        		shift
 					if [[ "$1 $2" =~ ^[0-9]{1,}[[:space:]](second|minute|hour|day|week|month|year)(s)?$ ]]
@@ -166,7 +185,7 @@ function perform_action {
 	esac
 }
 function occ_run {
-	sudo -u $HTTP_USER php ${NEXTCLOUDDIR}/occ ldap:show-remnants --short-date --json | jq '.[] | "\(.ocName);\(.lastLogin)"' | sed 's#"##g'
+	sudo -u $HTTP_USER php ${NEXTCLOUDDIR}/occ ldap:show-remnants --short-date --json | jq ".[] | \"\(.ocName);\(.$ROW)\"" | sed 's#"##g'
 }
 function check_input {
 	if [[ -z $uid && $last ]]
